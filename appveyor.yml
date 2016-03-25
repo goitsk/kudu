@@ -1,0 +1,29 @@
+#
+# Kudu solution
+# AppVeyor configuration
+#
+
+version: 1.0.{build}
+
+branches:
+  except:
+    - gh-pages
+
+os: Visual Studio 2015
+
+configuration:
+  - Release
+  - Debug
+
+build_script: build.cmd %CONFIGURATION%
+
+before_package:
+  - cmd: 7z a artifacts\KuduWeb.zip %APPVEYOR_BUILD_FOLDER%\artifacts\%CONFIGURATION%\KuduWeb\*.*
+
+artifacts:
+  - path: 'artifacts\KuduWeb.zip'
+
+test: off
+
+cache:
+  - packages -> **\packages.config
