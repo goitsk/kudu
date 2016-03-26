@@ -15,7 +15,12 @@ configuration:
   - Release
   - Debug
 
-build_script: build.cmd %CONFIGURATION%
+before_build:
+  - cmd: set BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
+
+build:
+  project: Build\Build.proj
+  verbosity: normal
 
 before_package:
   - cmd: 7z a artifacts\KuduWeb.zip %APPVEYOR_BUILD_FOLDER%\artifacts\%CONFIGURATION%\KuduWeb\*.*
