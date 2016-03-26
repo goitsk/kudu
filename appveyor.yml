@@ -26,7 +26,7 @@ build:
   verbosity: normal
 
 before_package:
-  - cmd: 7z a artifacts\KuduWeb.zip %APPVEYOR_BUILD_FOLDER%\artifacts\%CONFIGURATION%\KuduWeb\*.*
+  - cmd: 7z a artifacts\KuduWeb.zip %APPVEYOR_BUILD_FOLDER%\artifacts\%CONFIGURATION%\KuduWeb\*
 
 artifacts:
   - path: 'artifacts\KuduWeb.zip'
