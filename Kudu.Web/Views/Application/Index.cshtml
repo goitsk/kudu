@@ -2,25 +2,69 @@
 @using Kudu.Web.Models
 @using Kudu.Web.Infrastructure
 
-@model IEnumerable<string>
+@model System.Collections.Generic.IEnumerable<string>
 
 @{
     ViewBag.Title = "Applications";
 }
 
-<div class="well">
-    <h1>Applications</h1>
-    @foreach (var item in Model)
-    {
-        <p>
-            @using (Html.BeginForm("Delete", "Application", new { slug = item.GenerateSlug() }))
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Application</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
             {
-                <button type="submit" class="plain"><i class="glyphicon glyphicon-remove"></i></button>
-                <a href="@Url.RouteUrl("ApplicationDetails", new { slug = item })" class="site-item">
-                    <i class="glyphicon glyphicon-th-list"></i>
-                    @item
-                </a>
+                <tr>
+                    <td>
+                        <a href="@Url.RouteUrl("ApplicationDetails", new { slug = item })" class="site-item"
+                           title="View application settings">
+                            <i class="glyphicon glyphicon-th-list"></i>
+                            @item
+                        </a>
+                    </td>
+                    <td>
+                        @*using (Html.BeginForm("Delete", "Application", new { slug = item.GenerateSlug() }))*@
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-xs btn-application-delete"
+                                    title="Delete application"
+                                    data-toggle="modal" data-target="#applicationDeleteModal"
+                                    data-app-name="@item">
+                                <i class="glyphicon glyphicon-remove"></i> Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
             }
-        </p>
-    }
+        </tbody>
+    </table>
 </div>
+
+<div id="applicationDeleteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="applicationDeleteModalTitle">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 id="applicationDeleteModalTitle" class="modal-title">Delete Application Confirmation</h3>
+      </div>
+      <div class="modal-body">
+        <p>
+            If you continue, your web application '<strong id="applicationDeleteModal-name" class="text-danger"></strong>' and all the data within it will be permanently deleted.<br />
+            If you still want to delete this application, click confirm button.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" title="Delete application">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/Site.js")"></script>
+}

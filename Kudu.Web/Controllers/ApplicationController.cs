@@ -85,6 +85,7 @@ namespace Kudu.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string slug)
         {
             if (await _applicationService.DeleteApplication(slug))
